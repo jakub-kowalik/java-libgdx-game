@@ -1,0 +1,13 @@
+package com.mygdx.game.handlers;
+
+public class Box2DVariables {
+
+    public static final float pixelPerMeter = 100;
+
+    public static final short CATEGORY_BIT_GROUND = 2;
+    public static final short CATEGORY_BIT_PLAYER = 4;
+    public static final short CATEGORY_BIT_COLLECTABLE = 8;
+
+
+
+}
