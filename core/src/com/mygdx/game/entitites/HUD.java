@@ -25,9 +25,8 @@ public class HUD {
         textureRegion = new TextureRegion[1];
 
         for (int i = 0; i < textureRegion.length; i++) {
-            textureRegion[i] = new TextureRegion(texture, 0 + i * 16, 0, 16,16);
+            textureRegion[i] = new TextureRegion(texture, 0 + i * 16, 0, 32,32);
         }
-        textureRegion[0].flip(true, false);
         font = new BitmapFont();
 
     }
@@ -35,7 +34,7 @@ public class HUD {
     public void render(SpriteBatch spriteBatch) {
 
         spriteBatch.begin();
-        spriteBatch.draw(textureRegion[0], 20, 205);
+        spriteBatch.draw(textureRegion[0], 5, 195);
         font.draw(spriteBatch, "Player: Michal Wisniewski", 40, 220);
         font.draw(spriteBatch, "Level: NIGHTMARE", 40, 200);
         font.draw(spriteBatch, "Times made others cringe: ", 40, 180);

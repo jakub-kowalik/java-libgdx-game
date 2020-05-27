@@ -43,8 +43,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		resources = new ContentHandler();
 		resources.loadTexture("entities/michal-wisniewski.png", "michal");
-		resources.loadTexture("entities/obrazek11.png", "crystals");
-		resources.loadTexture("entities/hud.png", "hud");
+		resources.loadTexture("entities/pies.png", "crystals");
+		resources.loadTexture("entities/player1.png", "hud");
 		resources.loadTexture("entities/sky.png", "sky");
 
 
