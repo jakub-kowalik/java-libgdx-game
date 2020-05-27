@@ -3,6 +3,8 @@ package com.mygdx.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -14,11 +16,14 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.entitites.Collectable;
+import com.mygdx.game.entitites.HUD;
 import com.mygdx.game.entitites.Player;
 import com.mygdx.game.handlers.ContactHandler;
 import com.mygdx.game.handlers.GameStateManager;
 import com.mygdx.game.handlers.InputHandler;
+import javafx.scene.layout.Background;
 
 import static com.mygdx.game.handlers.Box2DVariables.*;
 
@@ -39,6 +44,9 @@ public class Play extends GameState {
 
     private Player player;
     private Array<Collectable> collectable;
+    private HUD hud;
+
+    private boolean debug = false;
 
     public Play(GameStateManager gameStateManager) {
 
@@ -63,6 +71,10 @@ public class Play extends GameState {
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false, game.V_WIDTH / pixelPerMeter, game.V_HEIGHT / pixelPerMeter);
 
+        //set up hud
+        hud = new HUD(player);
+
+        //set background
 
     }
 
@@ -111,10 +123,18 @@ public class Play extends GameState {
 
     @Override
     public void render() {
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        spriteBatch.begin();
+        MyGdxGame.backgroundSprite.draw(spriteBatch);
+        spriteBatch.end();
 
         orthogonalTiledMapRenderer.setView(camera);
         orthogonalTiledMapRenderer.render();
+
+        camera.position.set(player.getPosition().x * pixelPerMeter, player.getPosition().y * pixelPerMeter, 0);
+        camera.update();
 
         //draw player
         spriteBatch.setProjectionMatrix(camera.combined);
@@ -124,7 +144,15 @@ public class Play extends GameState {
             collectable.get(i).render(spriteBatch);
         }
 
-        box2DDebugRenderer.render(world, box2DCamera.combined);
+        spriteBatch.setProjectionMatrix(hudCamera.combined);
+        hud.render(spriteBatch);
+
+
+        if (debug) {
+            box2DCamera.position.set(player.getPosition(), 0);
+            box2DCamera.update();
+            box2DDebugRenderer.render(world, box2DCamera.combined);
+        }
     }
 
     @Override
@@ -216,7 +244,7 @@ public class Play extends GameState {
 
                 chainShape.createChain(vector2s);
 
-                fdef.friction = 0.5f;
+                fdef.friction = 1f;
                 fdef.shape = chainShape;
                 fdef.filter.categoryBits = bits;
                 fdef.filter.maskBits = CATEGORY_BIT_PLAYER;

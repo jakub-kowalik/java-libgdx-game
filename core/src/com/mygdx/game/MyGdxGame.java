@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.handlers.*;
 
@@ -31,6 +32,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	public static ContentHandler resources;
 
+	public static Texture backgroundTexture;
+	public static Sprite backgroundSprite;
+
 
 	@Override
 	public void create () {
@@ -40,6 +44,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		resources = new ContentHandler();
 		resources.loadTexture("entities/hedgehogsmall-Sheet.png", "hedgehogsmall");
 		resources.loadTexture("entities/obrazek11.png", "crystals");
+		resources.loadTexture("entities/hud.png", "hud");
+		resources.loadTexture("entities/sky.png", "sky");
+
 
 		spriteBatch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -49,12 +56,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		hudCamera.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
 		gameStateManager = new GameStateManager(this);
-		img = new Texture("badlogic.jpg");
+		backgroundSprite =new Sprite(resources.getTexture("sky"));
 	}
 
 
 	@Override
 	public void render () {
+
 
 		accumulator += Gdx.graphics.getDeltaTime();
 		while(accumulator >= STEP) {
