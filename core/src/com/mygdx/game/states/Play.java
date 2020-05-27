@@ -25,6 +25,8 @@ import com.mygdx.game.handlers.GameStateManager;
 import com.mygdx.game.handlers.InputHandler;
 import javafx.scene.layout.Background;
 
+import java.lang.management.GarbageCollectorMXBean;
+
 import static com.mygdx.game.handlers.Box2DVariables.*;
 
 public class Play extends GameState {
@@ -53,7 +55,7 @@ public class Play extends GameState {
         super(gameStateManager);
 
         // set up box2d
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, -9.81f), false);
         contactHandler = new ContactHandler();
         world.setContactListener(contactHandler);
         box2DDebugRenderer = new Box2DDebugRenderer();
@@ -119,12 +121,13 @@ public class Play extends GameState {
 
         for (int i = 0; i < collectable.size; i++)
             collectable.get(i).update(dt);
+
     }
 
     @Override
     public void render() {
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         spriteBatch.begin();
         MyGdxGame.backgroundSprite.draw(spriteBatch);
@@ -173,7 +176,7 @@ public class Play extends GameState {
         Body body = world.createBody(bdef);
 
 
-        shape.setAsBox(5 / pixelPerMeter, 2 / pixelPerMeter);
+        shape.setAsBox(4 / pixelPerMeter, 15 / pixelPerMeter);
         fdef.shape = shape;
         fdef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fdef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
@@ -183,7 +186,7 @@ public class Play extends GameState {
 
         //create foot sensor
 
-        shape.setAsBox(5 / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -2 / pixelPerMeter), 0);
+        shape.setAsBox(4 / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -16 / pixelPerMeter), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fdef.filter.maskBits = CATEGORY_BIT_GROUND;
@@ -232,6 +235,9 @@ public class Play extends GameState {
                 //create box2d body and fixture
                 bdef.type = BodyDef.BodyType.StaticBody;
                 bdef.position.set((col + 0.5f) * tileSize / pixelPerMeter, (row + 0.5f) * tileSize / pixelPerMeter);
+
+               // PolygonShape chainShape = new PolygonShape();
+
                 ChainShape chainShape = new ChainShape();
 
                 Vector2[] vector2s = new Vector2[5];
@@ -243,6 +249,9 @@ public class Play extends GameState {
 
 
                 chainShape.createChain(vector2s);
+
+               // chainShape.setAsBox(tileSize / 2 / pixelPerMeter, tileSize / 2 / pixelPerMeter);
+
 
                 fdef.friction = 1f;
                 fdef.shape = chainShape;

@@ -42,7 +42,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new InputProcessor());
 
 		resources = new ContentHandler();
-		resources.loadTexture("entities/hedgehogsmall-Sheet.png", "hedgehogsmall");
+		resources.loadTexture("entities/michal-wisniewski.png", "michal");
 		resources.loadTexture("entities/obrazek11.png", "crystals");
 		resources.loadTexture("entities/hud.png", "hud");
 		resources.loadTexture("entities/sky.png", "sky");

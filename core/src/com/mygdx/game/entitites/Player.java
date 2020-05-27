@@ -14,8 +14,8 @@ public class Player extends Box2DSprite {
 
         super(body);
 
-        Texture texture = MyGdxGame.resources.getTexture("hedgehogsmall");
-        TextureRegion[] textureRegion = TextureRegion.split(texture, 10, 5)[0];
+        Texture texture = MyGdxGame.resources.getTexture("michal");
+        TextureRegion[] textureRegion = TextureRegion.split(texture, 16, 32)[0];
 
         setAnimationHandler(textureRegion, 1/12f);
     }
