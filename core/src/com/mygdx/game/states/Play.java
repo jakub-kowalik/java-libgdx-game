@@ -27,6 +27,7 @@ import com.mygdx.game.entitites.Player;
 import com.mygdx.game.handlers.ContactHandler;
 import com.mygdx.game.handlers.GameStateManager;
 import com.mygdx.game.handlers.InputHandler;
+import com.mygdx.game.handlers.MapBodyBuilder;
 import javafx.scene.layout.Background;
 
 import java.lang.management.GarbageCollectorMXBean;
@@ -52,7 +53,7 @@ public class Play extends GameState {
     private Player player;
     private Array<Collectable> collectable;
     private HUD hud;
-
+    MapBodyBuilder mapBodyBuilder;
     private boolean debug = true;
 
     public Play(GameStateManager gameStateManager) {
@@ -65,6 +66,7 @@ public class Play extends GameState {
         world.setContactListener(contactHandler);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
+        mapBodyBuilder = new MapBodyBuilder();
         // set up player
         createPlayer();
 
@@ -292,8 +294,10 @@ public class Play extends GameState {
 
         TiledMapTileLayer layer;
 
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("floor");
-        createLayer(layer, CATEGORY_BIT_GROUND);
+        MapBodyBuilder.buildShapes(tiledMap, 16, world);
+
+        /*layer = (TiledMapTileLayer) tiledMap.getLayers().get("floor");
+        createLayer(layer, CATEGORY_BIT_GROUND);*/
 
     }
 
