@@ -29,6 +29,12 @@ public class InputProcessor extends InputAdapter {
         if(k == BTN4) {
             InputHandler.setKey(InputHandler.BUTTON4, true);
         }
+        if(k == BTN5) {
+            InputHandler.setKey(InputHandler.BUTTON5, true);
+        }
+        if(k == BTN6) {
+            InputHandler.setKey(InputHandler.BUTTON6, true);
+        }
         return true;
     }
 
@@ -48,6 +54,12 @@ public class InputProcessor extends InputAdapter {
 
         if(k == BTN4) {
             InputHandler.setKey(InputHandler.BUTTON4, false);
+        }
+        if(k == BTN5) {
+            InputHandler.setKey(InputHandler.BUTTON5, false);
+        }
+        if(k == BTN6) {
+            InputHandler.setKey(InputHandler.BUTTON6, false);
         }
         return true;
     }

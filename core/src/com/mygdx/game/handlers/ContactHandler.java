@@ -31,7 +31,7 @@ public class ContactHandler implements ContactListener {
         if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("crystal"))
             bodiesToRemove.add(fixtureB.getBody());
 
-        System.out.println(fixtureA.getUserData() + ",1 " + fixtureB.getUserData());
+        System.out.println("1 " + numFootContacts);
 
 
 
@@ -49,7 +49,7 @@ public class ContactHandler implements ContactListener {
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("foot"))
             numFootContacts--;
-        System.out.println(fixtureA.getUserData() + ", 2" + fixtureB.getUserData());
+        System.out.println("2 " + numFootContacts);
     }
 
     public boolean getIsGrounded() { return numFootContacts > 0; }

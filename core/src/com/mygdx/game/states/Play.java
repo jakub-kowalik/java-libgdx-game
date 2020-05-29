@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -15,8 +16,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.entitites.Box2DSprite;
 import com.mygdx.game.entitites.Collectable;
 import com.mygdx.game.entitites.HUD;
 import com.mygdx.game.entitites.Player;
@@ -37,6 +41,7 @@ public class Play extends GameState {
 
     private OrthographicCamera box2DCamera;
 
+    RevoluteJoint playerMotor;
 
     private ContactHandler contactHandler;
 
@@ -48,7 +53,7 @@ public class Play extends GameState {
     private Array<Collectable> collectable;
     private HUD hud;
 
-    private boolean debug = false;
+    private boolean debug = true;
 
     public Play(GameStateManager gameStateManager) {
 
@@ -85,19 +90,41 @@ public class Play extends GameState {
     public void handleInput() {
 
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded()) {
-            player.getBody().applyForceToCenter(0, 200, true);
+            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+            player.getBody().applyLinearImpulse(new Vector2(0, 50), player.getBody().getWorldCenter(), true);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
-            player.getBody().applyForceToCenter(-10, 0, true);
+            if(player.getBody().getLinearVelocity().x > -5) {
+                playerMotor.enableMotor(false);
+                player.getBody().applyLinearImpulse(
+                        -5,
+                        0,
+                        player.getBody().getWorldCenter().x,
+                        player.getBody().getWorldCenter().y,
+                        true
+                );
+            }
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) {
-            player.getBody().applyForceToCenter(10, 0, true);
+            if(player.getBody().getLinearVelocity().x < 5) {
+                playerMotor.enableMotor(false);
+                player.getBody().applyLinearImpulse(
+                        5,
+                        0,
+                        player.getBody().getWorldCenter().x,
+                        player.getBody().getWorldCenter().y,
+                        true
+                );
+            }
         }
 
         if (InputHandler.isPressed(InputHandler.BUTTON5)) {
-
+            debug = true;
+        }
+        if (InputHandler.isPressed(InputHandler.BUTTON6)) {
+            debug = false;
         }
 
     }
@@ -105,7 +132,7 @@ public class Play extends GameState {
     @Override
     public void update(float dt) {
         handleInput();
-        world.step(dt, 1, 1);
+        world.step(dt, 2, 2);
 
         //remove collectables
         Array<Body> bodies = contactHandler.getBodiesToRemove();
@@ -165,38 +192,88 @@ public class Play extends GameState {
 
     private void createPlayer() {
 
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+        BodyDef bodyDef = new BodyDef();
+        FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
 
         // create player
-        bdef.position.set(160 / pixelPerMeter, 200 / pixelPerMeter);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        Body body = world.createBody(bdef);
+        bodyDef.position.set(160 / pixelPerMeter, 200 / pixelPerMeter);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bodyDef);
 
 
-        shape.setAsBox(4 / pixelPerMeter, 15 / pixelPerMeter);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-        fdef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
-        fdef.restitution = 0f;
-        body.createFixture(fdef).setUserData("player");
-        body.createFixture(fdef);
+        shape.setAsBox(4 / pixelPerMeter, 16 / pixelPerMeter);
+        fixtureDef.shape = shape;
+        fixtureDef.density = 10;
+        fixtureDef.restitution = 0;
+        fixtureDef.friction = 0f;
+
+        //fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
+       // fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
+        body.createFixture(fixtureDef);
+        body.setFixedRotation(true);
+
+        // collision box
+
+        shape.setAsBox(4 / pixelPerMeter, 13 / pixelPerMeter, new Vector2(0, 1 / pixelPerMeter), 0);
+        fixtureDef.shape = shape;
+        fixtureDef.density = 5;
+        fixtureDef.restitution = 0;
+        fixtureDef.friction = 0f;
+
+        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
+        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
+        body.createFixture(fixtureDef).setUserData("player");
+
+        //wheel
+
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(4f/pixelPerMeter);
+
+        bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(160 / pixelPerMeter, 200 / pixelPerMeter);
+        Body body2 = world.createBody(bodyDef);
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 10;
+        fixtureDef.restitution = 0f;
+        fixtureDef.friction = 20f;
+        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
+        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
+        body2.createFixture(fixtureDef);
+        body2.setUserData("player");
+        body2.setLinearDamping(0.5f);
+        circleShape.dispose();
+        RevoluteJointDef motor = new RevoluteJointDef();
+        motor.enableMotor = false;
+//        motor.motorSpeed = 360 * MathUtils.degreesToRadians;
+        motor.maxMotorTorque = 100;
+        motor.bodyA = body;
+        motor.bodyB = body2;
+        motor.collideConnected = false;
+
+        motor.localAnchorA.set(0,(-16+4f) / pixelPerMeter);
+        motor.localAnchorB.set(0,0);
+
+        playerMotor = (RevoluteJoint) world.createJoint(motor);
 
         //create foot sensor
 
-        shape.setAsBox(4 / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -16 / pixelPerMeter), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-        fdef.filter.maskBits = CATEGORY_BIT_GROUND;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("foot");
+        shape.setAsBox(3f / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -18 / pixelPerMeter), 0);
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
+        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef).setUserData("foot");
+        shape.dispose();
 
         //create player
 
-        player = new Player(body);
 
+
+        player = new Player(body);
         body.setUserData(player);
 
     }
@@ -237,7 +314,7 @@ public class Play extends GameState {
                 bdef.position.set((col + 0.5f) * tileSize / pixelPerMeter, (row + 0.5f) * tileSize / pixelPerMeter);
 
                // PolygonShape chainShape = new PolygonShape();
-
+                //chainShape.setAsBox(tileSize / 2 / pixelPerMeter, tileSize / 2 / pixelPerMeter);
                 ChainShape chainShape = new ChainShape();
 
                 Vector2[] vector2s = new Vector2[5];
@@ -250,10 +327,12 @@ public class Play extends GameState {
 
                 chainShape.createChain(vector2s);
 
-               // chainShape.setAsBox(tileSize / 2 / pixelPerMeter, tileSize / 2 / pixelPerMeter);
+
+
 
 
                 fdef.friction = 1f;
+                fdef.restitution = 0;
                 fdef.shape = chainShape;
                 fdef.filter.categoryBits = bits;
                 fdef.filter.maskBits = CATEGORY_BIT_PLAYER;
@@ -262,6 +341,10 @@ public class Play extends GameState {
             }
         }
 
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     private void createCollectable() {
@@ -298,5 +381,7 @@ public class Play extends GameState {
 
 
         }
+
+
     }
 }
