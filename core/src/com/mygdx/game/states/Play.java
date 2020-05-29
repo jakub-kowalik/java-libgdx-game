@@ -91,14 +91,14 @@ public class Play extends GameState {
 
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded()) {
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, 50), player.getBody().getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0, 1750 /pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
             if(player.getBody().getLinearVelocity().x > -5) {
                 playerMotor.enableMotor(false);
                 player.getBody().applyLinearImpulse(
-                        -5,
+                        -100 / pixelPerMeter,
                         0,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
@@ -111,8 +111,8 @@ public class Play extends GameState {
             if(player.getBody().getLinearVelocity().x < 5) {
                 playerMotor.enableMotor(false);
                 player.getBody().applyLinearImpulse(
-                        5,
-                        0,
+                        100 / pixelPerMeter,
+                        0 / pixelPerMeter,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
@@ -149,6 +149,11 @@ public class Play extends GameState {
         for (int i = 0; i < collectable.size; i++)
             collectable.get(i).update(dt);
 
+        if (Math.abs(player.getBody().getLinearVelocity().x) > 0 && !InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
+            playerMotor.setMotorSpeed(playerMotor.getMotorSpeed() * 0.0001f);
+            playerMotor.enableMotor(true);
+
+        }
     }
 
     @Override
@@ -244,7 +249,6 @@ public class Play extends GameState {
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
         body2.createFixture(fixtureDef);
         body2.setUserData("player");
-        body2.setLinearDamping(0.5f);
         circleShape.dispose();
         RevoluteJointDef motor = new RevoluteJointDef();
         motor.enableMotor = false;
@@ -259,9 +263,9 @@ public class Play extends GameState {
 
         playerMotor = (RevoluteJoint) world.createJoint(motor);
 
-        //create foot sensor
+        //create sensor
 
-        shape.setAsBox(3f / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -18 / pixelPerMeter), 0);
+       shape.setAsBox(3f / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -18 / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
