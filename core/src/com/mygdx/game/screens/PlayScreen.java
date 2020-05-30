@@ -66,7 +66,6 @@ public class PlayScreen extends BaseScreen {
         world.setContactListener(contactHandler);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
-        mapBodyBuilder = new MapBodyBuilder();
         // set up player
         createPlayer();
 
@@ -78,7 +77,7 @@ public class PlayScreen extends BaseScreen {
 
         // set box2d cam
         box2DCamera = new OrthographicCamera();
-        box2DCamera.setToOrtho(false, game.V_WIDTH / pixelPerMeter, game.V_HEIGHT / pixelPerMeter);
+        box2DCamera.setToOrtho(false, MyGdxGame.V_WIDTH / pixelPerMeter, MyGdxGame.V_HEIGHT / pixelPerMeter);
 
         //set up hud
         hud = new HUD(player);
@@ -285,6 +284,7 @@ public class PlayScreen extends BaseScreen {
         body.setUserData(player);
 
     }
+
 
     private void createTiledMap() {
 
