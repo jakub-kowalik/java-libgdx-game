@@ -9,9 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.handlers.*;
+import com.mygdx.game.screens.screenTesting;
 
 
-public class MyGdxGame extends ApplicationAdapter {
+public class MyGdxGame extends Game {
 	SpriteBatch batch;
 	Texture img;
 
@@ -35,6 +36,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	public static Texture backgroundTexture;
 	public static Sprite backgroundSprite;
 
+	public static screenTesting currentScreen;
+
 
 	@Override
 	public void create () {
@@ -54,23 +57,26 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		hudCamera = new OrthographicCamera();
 		hudCamera.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		currentScreen = new screenTesting(this);
 
-		gameStateManager = new GameStateManager(this);
+		this.setScreen(currentScreen);
 		backgroundSprite =new Sprite(resources.getTexture("sky"));
 	}
 
 
 	@Override
 	public void render () {
-
+		super.render();
 
 		accumulator += Gdx.graphics.getDeltaTime();
-		while(accumulator >= STEP) {
+		currentScreen.update(STEP);
+		currentScreen.render(STEP);
+/*		while(accumulator >= STEP) {
 			accumulator -= STEP;
-			gameStateManager.update(STEP);
-			gameStateManager.render();
+			currentScreen.update(accumulator);
+			currentScreen.render(accumulator);
 			InputHandler.update();
-		}
+		}*/
 
 /*		spriteBatch.setProjectionMatrix(hudCamera.combined);
 		spriteBatch.begin();

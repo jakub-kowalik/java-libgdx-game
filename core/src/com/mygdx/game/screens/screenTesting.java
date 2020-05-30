@@ -1,4 +1,4 @@
-package com.mygdx.game.states;
+package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -25,16 +25,16 @@ import com.mygdx.game.entitites.Collectable;
 import com.mygdx.game.entitites.HUD;
 import com.mygdx.game.entitites.Player;
 import com.mygdx.game.handlers.ContactHandler;
-import com.mygdx.game.handlers.GameStateManager;
 import com.mygdx.game.handlers.InputHandler;
 import com.mygdx.game.handlers.MapBodyBuilder;
-import javafx.scene.layout.Background;
+import com.mygdx.game.screens.BaseScreen;
+
 
 import java.lang.management.GarbageCollectorMXBean;
 
 import static com.mygdx.game.handlers.Box2DVariables.*;
 
-public class Play extends GameState {
+public class screenTesting extends BaseScreen {
 
 
     private World world;
@@ -56,9 +56,9 @@ public class Play extends GameState {
     MapBodyBuilder mapBodyBuilder;
     private boolean debug = true;
 
-    public Play(GameStateManager gameStateManager) {
+    public screenTesting(MyGdxGame game) {
 
-        super(gameStateManager);
+        super(game);
 
         // set up box2d
         world = new World(new Vector2(0, -9.81f), false);
@@ -88,7 +88,7 @@ public class Play extends GameState {
     }
 
 
-    @Override
+ //   @Override
     public void handleInput() {
 
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded()) {
@@ -159,7 +159,7 @@ public class Play extends GameState {
     }
 
     @Override
-    public void render() {
+    public void render(float dt) {
 
 
 
@@ -192,6 +192,7 @@ public class Play extends GameState {
         }
     }
 
+
     @Override
     public void dispose() {
 
@@ -217,7 +218,7 @@ public class Play extends GameState {
         fixtureDef.friction = 0f;
 
         //fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-       // fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
+        // fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
         body.createFixture(fixtureDef);
         body.setFixedRotation(true);
 
@@ -267,7 +268,7 @@ public class Play extends GameState {
 
         //create sensor
 
-       shape.setAsBox(3f / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -18 / pixelPerMeter), 0);
+        shape.setAsBox(3f / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -18 / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
@@ -321,7 +322,7 @@ public class Play extends GameState {
                 bdef.type = BodyDef.BodyType.StaticBody;
                 bdef.position.set((col + 0.5f) * tileSize / pixelPerMeter, (row + 0.5f) * tileSize / pixelPerMeter);
 
-               // PolygonShape chainShape = new PolygonShape();
+                // PolygonShape chainShape = new PolygonShape();
                 //chainShape.setAsBox(tileSize / 2 / pixelPerMeter, tileSize / 2 / pixelPerMeter);
                 ChainShape chainShape = new ChainShape();
 
