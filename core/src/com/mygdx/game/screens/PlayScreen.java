@@ -34,7 +34,7 @@ import java.lang.management.GarbageCollectorMXBean;
 
 import static com.mygdx.game.handlers.Box2DVariables.*;
 
-public class screenTesting extends BaseScreen {
+public class PlayScreen extends BaseScreen {
 
 
     private World world;
@@ -56,7 +56,7 @@ public class screenTesting extends BaseScreen {
     MapBodyBuilder mapBodyBuilder;
     private boolean debug = true;
 
-    public screenTesting(MyGdxGame game) {
+    public PlayScreen(MyGdxGame game) {
 
         super(game);
 
@@ -97,29 +97,35 @@ public class screenTesting extends BaseScreen {
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
-            if(player.getBody().getLinearVelocity().x > -5) {
-                playerMotor.enableMotor(false);
-                player.getBody().applyLinearImpulse(
+            if (player.getBody().getLinearVelocity().x > -5 && contactHandler.getIsGrounded()) {
+                playerMotor.enableMotor(true);
+                playerMotor.setMotorSpeed(50);
+/*                player.getBody().applyLinearImpulse(
                         -100 / pixelPerMeter,
                         0,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
-                );
+                );*/
             }
+            if(!contactHandler.getIsGrounded())
+                playerMotor.enableMotor(false);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) {
-            if(player.getBody().getLinearVelocity().x < 5) {
-                playerMotor.enableMotor(false);
-                player.getBody().applyLinearImpulse(
+            if (player.getBody().getLinearVelocity().x < 5 && contactHandler.getIsGrounded()) {
+                playerMotor.enableMotor(true);
+                playerMotor.setMotorSpeed(-50);
+/*                player.getBody().applyLinearImpulse(
                         100 / pixelPerMeter,
                         0 / pixelPerMeter,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
-                );
+                );*/
             }
+            if(!contactHandler.getIsGrounded())
+                playerMotor.enableMotor(false);
         }
 
         if (InputHandler.isPressed(InputHandler.BUTTON5)) {
@@ -245,7 +251,7 @@ public class screenTesting extends BaseScreen {
         Body body2 = world.createBody(bodyDef);
         fixtureDef = new FixtureDef();
         fixtureDef.shape = circleShape;
-        fixtureDef.density = 50;
+        fixtureDef.density = 100;
         fixtureDef.restitution = 0f;
         fixtureDef.friction = 20f;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;

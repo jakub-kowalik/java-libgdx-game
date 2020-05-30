@@ -1,15 +1,13 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.handlers.*;
-import com.mygdx.game.screens.screenTesting;
+import com.mygdx.game.screens.PlayScreen;
 
 
 public class MyGdxGame extends Game {
@@ -36,7 +34,7 @@ public class MyGdxGame extends Game {
 	public static Texture backgroundTexture;
 	public static Sprite backgroundSprite;
 
-	public static screenTesting currentScreen;
+	public static PlayScreen currentScreen;
 
 
 	@Override
@@ -57,7 +55,7 @@ public class MyGdxGame extends Game {
 
 		hudCamera = new OrthographicCamera();
 		hudCamera.setToOrtho(false, V_WIDTH, V_HEIGHT);
-		currentScreen = new screenTesting(this);
+		currentScreen = new PlayScreen(this);
 
 		this.setScreen(currentScreen);
 		backgroundSprite =new Sprite(resources.getTexture("sky"));

@@ -24,4 +24,5 @@ public class Player extends Box2DSprite {
     public int getNumCrystals() {return numCrystals; }
     public void setTotalCrystals(int i) { totalCrystals = i;}
     public int getTotalCrystals() { return totalCrystals; }
+
 }
