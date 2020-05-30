@@ -10,16 +10,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 
-import static com.mygdx.game.handlers.Box2DVariables.CATEGORY_BIT_PLAYER;
+import static com.mygdx.game.handlers.Box2DVariables.*;
+
 
 public class MapBodyBuilder {
 
     // The pixels per tile. If your tiles are 16x16, this is set to 16f
     private static float ppt = 0;
 
-    public static Array<Body> buildShapes(Map map, float pixels, World world) {
+    public static Array<Body> buildShapes(Map map, float pixels, String layerName, World world, short categoryBits, short maskBits) {
         ppt = pixels;
-        MapObjects objects = map.getLayers().get("Obstacles").getObjects();
+        MapObjects objects = map.getLayers().get(layerName).getObjects();
 
         Array<Body> bodies = new Array<Body>();
 
@@ -52,8 +53,8 @@ public class MapBodyBuilder {
             fdef.friction = 1f;
             fdef.restitution = 0;
             fdef.shape = shape;
-            fdef.filter.categoryBits = 2;
-            fdef.filter.maskBits = CATEGORY_BIT_PLAYER;
+            fdef.filter.categoryBits = categoryBits;
+            fdef.filter.maskBits = maskBits;
             fdef.isSensor = false;
             bd.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bd);

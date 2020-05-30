@@ -294,7 +294,7 @@ public class Play extends GameState {
 
         TiledMapTileLayer layer;
 
-        MapBodyBuilder.buildShapes(tiledMap, 16, world);
+//        MapBodyBuilder.buildShapes(tiledMap, 16, world);
 
         /*layer = (TiledMapTileLayer) tiledMap.getLayers().get("floor");
         createLayer(layer, CATEGORY_BIT_GROUND);*/

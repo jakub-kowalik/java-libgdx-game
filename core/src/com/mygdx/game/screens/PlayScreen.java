@@ -93,39 +93,34 @@ public class PlayScreen extends BaseScreen {
 
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded()) {
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, 3500 /pixelPerMeter), player.getBody().getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0, 2500 /pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
-            if (player.getBody().getLinearVelocity().x > -5 && contactHandler.getIsGrounded()) {
-                playerMotor.enableMotor(true);
-                playerMotor.setMotorSpeed(50);
-/*                player.getBody().applyLinearImpulse(
+            if (player.getBody().getLinearVelocity().x > -5) {
+                playerMotor.enableMotor(false);
+             player.getBody().applyLinearImpulse(
                         -100 / pixelPerMeter,
                         0,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
-                );*/
+                );
             }
-            if(!contactHandler.getIsGrounded())
-                playerMotor.enableMotor(false);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) {
-            if (player.getBody().getLinearVelocity().x < 5 && contactHandler.getIsGrounded()) {
-                playerMotor.enableMotor(true);
-                playerMotor.setMotorSpeed(-50);
-/*                player.getBody().applyLinearImpulse(
+            if (player.getBody().getLinearVelocity().x < 5) {
+                playerMotor.enableMotor(false);
+              player.getBody().applyLinearImpulse(
                         100 / pixelPerMeter,
                         0 / pixelPerMeter,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
-                );*/
+                );
             }
-            if(!contactHandler.getIsGrounded())
-                playerMotor.enableMotor(false);
+
         }
 
         if (InputHandler.isPressed(InputHandler.BUTTON5)) {
@@ -158,7 +153,7 @@ public class PlayScreen extends BaseScreen {
             collectable.get(i).update(dt);
 
         if (Math.abs(player.getBody().getLinearVelocity().x) > 0 && !InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
-            playerMotor.setMotorSpeed(playerMotor.getMotorSpeed() * 0.0001f);
+            playerMotor.setMotorSpeed(0);
             playerMotor.enableMotor(true);
 
         }
@@ -251,7 +246,7 @@ public class PlayScreen extends BaseScreen {
         Body body2 = world.createBody(bodyDef);
         fixtureDef = new FixtureDef();
         fixtureDef.shape = circleShape;
-        fixtureDef.density = 100;
+        fixtureDef.density = 50;
         fixtureDef.restitution = 0f;
         fixtureDef.friction = 20f;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -301,7 +296,7 @@ public class PlayScreen extends BaseScreen {
 
         TiledMapTileLayer layer;
 
-        MapBodyBuilder.buildShapes(tiledMap, 16, world);
+        MapBodyBuilder.buildShapes(tiledMap, tileSize, "Obstacles", world, CATEGORY_BIT_GROUND, CATEGORY_BIT_PLAYER);
 
         /*layer = (TiledMapTileLayer) tiledMap.getLayers().get("floor");
         createLayer(layer, CATEGORY_BIT_GROUND);*/
