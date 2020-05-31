@@ -6,6 +6,10 @@ import com.badlogic.gdx.utils.Array;
 public class ContactHandler implements ContactListener {
 
     private int numFootContacts;
+    private int numHeadContacts;
+    private int numLeftContacts;
+    private int numRightContacts;
+
     private Array<Body> bodiesToRemove;
 
     public ContactHandler() {
@@ -25,6 +29,24 @@ public class ContactHandler implements ContactListener {
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("foot"))
             numFootContacts++;
+
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("head"))
+            numHeadContacts++;
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("head"))
+            numHeadContacts++;
+
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("left"))
+            numLeftContacts++;
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("left"))
+            numLeftContacts++;
+
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("right"))
+            numRightContacts++;
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("right"))
+            numRightContacts++;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("crystal"))
             bodiesToRemove.add(fixtureA.getBody());
@@ -49,10 +71,32 @@ public class ContactHandler implements ContactListener {
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("foot"))
             numFootContacts--;
+
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("head"))
+            numHeadContacts--;
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("head"))
+            numHeadContacts--;
+
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("left"))
+            numLeftContacts--;
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("left"))
+            numLeftContacts--;
+
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("right"))
+            numRightContacts--;
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("right"))
+            numRightContacts--;
+
         System.out.println("2 " + numFootContacts);
     }
 
     public boolean getIsGrounded() { return numFootContacts > 0; }
+    public boolean getIsCeiled() { return numHeadContacts > 0; }
+    public boolean getIsRightContact() { return numRightContacts > 0; }
+    public boolean getIsLeftContact() { return numLeftContacts > 0; }
     public Array<Body> getBodiesToRemove() { return bodiesToRemove; }
 
     //detection

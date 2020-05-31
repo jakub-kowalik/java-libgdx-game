@@ -6,11 +6,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.mygdx.game.handlers.AnimationHandler;
 
 public class Box2DSprite {
 
     protected Body body;
+    protected FixtureDef fixtureDef;
     protected AnimationHandler animationHandler;
     protected float width;
     protected float height;
@@ -37,6 +40,7 @@ public class Box2DSprite {
     }
 
     public Body getBody() {return body; }
+    public FixtureDef getFixtureDef() { return fixtureDef;}
     public Vector2 getPosition() { return body.getPosition(); }
     public float getWidth() { return width; }
     public float getHeight() { return height; }

@@ -1,15 +1,9 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -17,20 +11,16 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.entitites.Box2DSprite;
 import com.mygdx.game.entitites.Collectable;
 import com.mygdx.game.entitites.HUD;
 import com.mygdx.game.entitites.Player;
 import com.mygdx.game.handlers.ContactHandler;
 import com.mygdx.game.handlers.InputHandler;
 import com.mygdx.game.handlers.MapBodyBuilder;
-import com.mygdx.game.screens.BaseScreen;
+import com.mygdx.game.handlers.PlayerBodyBuilder;
 
-
-import java.lang.management.GarbageCollectorMXBean;
 
 import static com.mygdx.game.handlers.Box2DVariables.*;
 
@@ -90,12 +80,12 @@ public class PlayScreen extends BaseScreen {
  //   @Override
     public void handleInput() {
 
-        if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded()) {
+        if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded() && !contactHandler.getIsCeiled()) {
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
             player.getBody().applyLinearImpulse(new Vector2(0, 2500 /pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
-        if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
+        if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) && !contactHandler.getIsLeftContact()) {
             if (player.getBody().getLinearVelocity().x > -5) {
                 playerMotor.enableMotor(false);
              player.getBody().applyLinearImpulse(
@@ -108,7 +98,7 @@ public class PlayScreen extends BaseScreen {
             }
         }
 
-        if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) {
+        if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2) && !contactHandler.getIsRightContact()) {
             if (player.getBody().getLinearVelocity().x < 5) {
                 playerMotor.enableMotor(false);
               player.getBody().applyLinearImpulse(
@@ -204,84 +194,15 @@ public class PlayScreen extends BaseScreen {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
+        PlayerBodyBuilder playerBodyBuilder = new PlayerBodyBuilder(world, new Vector2(160,200));
 
-        // create player
-        bodyDef.position.set(160 / pixelPerMeter, 200 / pixelPerMeter);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        Body body = world.createBody(bodyDef);
-
-
-        shape.setAsBox(4 / pixelPerMeter, 16 / pixelPerMeter);
-        fixtureDef.shape = shape;
-        fixtureDef.density = 10;
-        fixtureDef.restitution = 0;
-        fixtureDef.friction = 0f;
-
-        //fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-        // fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
-        body.createFixture(fixtureDef);
-        body.setFixedRotation(true);
-
-        // collision box
-
-        shape.setAsBox(3.5f / pixelPerMeter, 13 / pixelPerMeter, new Vector2(0, 1 / pixelPerMeter), 0);
-        fixtureDef.shape = shape;
-        fixtureDef.density = 5;
-        fixtureDef.restitution = 0;
-        fixtureDef.friction = 0f;
-
-        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
-        body.createFixture(fixtureDef).setUserData("player");
-
-        //wheel
-
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(4f/pixelPerMeter);
-
-        bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(160 / pixelPerMeter, 200 / pixelPerMeter);
-        Body body2 = world.createBody(bodyDef);
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape;
-        fixtureDef.density = 50;
-        fixtureDef.restitution = 0f;
-        fixtureDef.friction = 20f;
-        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
-        body2.createFixture(fixtureDef);
-        body2.setUserData("player");
-        circleShape.dispose();
-        RevoluteJointDef motor = new RevoluteJointDef();
-        motor.enableMotor = false;
-//        motor.motorSpeed = 360 * MathUtils.degreesToRadians;
-        motor.maxMotorTorque = 100;
-        motor.bodyA = body;
-        motor.bodyB = body2;
-        motor.collideConnected = false;
-
-        motor.localAnchorA.set(0,(-16+4f) / pixelPerMeter);
-        motor.localAnchorB.set(0,0);
-
-        playerMotor = (RevoluteJoint) world.createJoint(motor);
-
-        //create sensor
-
-        shape.setAsBox(3f / pixelPerMeter, 2 / pixelPerMeter, new Vector2(0, -18 / pixelPerMeter), 0);
-        fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
-        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
-        fixtureDef.isSensor = true;
-        body.createFixture(fixtureDef).setUserData("foot");
-        shape.dispose();
 
         //create player
 
 
-
-        player = new Player(body);
-        body.setUserData(player);
+        player = new Player(playerBodyBuilder.getBody());
+        player.getBody().setUserData(player);
+        playerMotor = playerBodyBuilder.getPlayerMotor();
 
     }
 
