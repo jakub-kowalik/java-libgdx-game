@@ -1,8 +1,10 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -38,6 +40,9 @@ public class PlayScreen extends BaseScreen {
 
     private TiledMap tiledMap;
     private float tileSize;
+    private int mapWidth;
+    private int mapHeight;
+
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 
     private Player player;
@@ -82,7 +87,7 @@ public class PlayScreen extends BaseScreen {
 
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded() && !contactHandler.getIsCeiled()) {
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, 2500 /pixelPerMeter), player.getBody().getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0, 6000 /pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) ) { // && !contactHandler.getIsLeftContact()
@@ -161,6 +166,7 @@ public class PlayScreen extends BaseScreen {
         orthogonalTiledMapRenderer.render();
 
         camera.position.set(player.getPosition().x * pixelPerMeter, player.getPosition().y * pixelPerMeter, 0);
+        boundCamera(camera);
         camera.update();
 
         //draw player
@@ -194,7 +200,7 @@ public class PlayScreen extends BaseScreen {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        PlayerBodyBuilder playerBodyBuilder = new PlayerBodyBuilder(world, new Vector2(160,200));
+        PlayerBodyBuilder playerBodyBuilder = new PlayerBodyBuilder(player, world, new Vector2(160,330));
 
 
         //create player
@@ -210,10 +216,13 @@ public class PlayScreen extends BaseScreen {
     private void createTiledMap() {
 
         // load map
-        tiledMap = new TmxMapLoader().load("maps/mapaprototype.tmx");
+        tiledMap = new TmxMapLoader().load("maps/mapprototype-testing.tmx");
         orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         tileSize = (int) tiledMap.getProperties().get("tilewidth");
+
+        mapWidth = tiledMap.getProperties().get("width", Integer.class) * (int) tileSize;
+        mapHeight = tiledMap.getProperties().get("height", Integer.class) * (int) tileSize;
 
         TiledMapTileLayer layer;
 
@@ -314,5 +323,56 @@ public class PlayScreen extends BaseScreen {
         }
 
 
+    }
+
+    void boundCamera(Camera cam) {
+
+        // These values likely need to be scaled according to your world coordinates.
+// The left boundary of the map (x)
+        int mapLeft = 0;
+// The right boundary of the map (x + width)
+        int mapRight = 0 + mapWidth;
+// The bottom boundary of the map (y)
+        int mapBottom = 0;
+// The top boundary of the map (y + height)
+        int mapTop = 0 + mapHeight;
+// The camera dimensions, halved
+        float cameraHalfWidth = cam.viewportWidth * .5f;
+        float cameraHalfHeight = cam.viewportHeight * .5f;
+
+// Move camera after player as normal
+
+        float cameraLeft = cam.position.x - cameraHalfWidth;
+        float cameraRight = cam.position.x + cameraHalfWidth;
+        float cameraBottom = cam.position.y - cameraHalfHeight;
+        float cameraTop = cam.position.y + cameraHalfHeight;
+
+// Horizontal axis
+        if(mapWidth < cam.viewportWidth)
+        {
+            cam.position.x = mapRight / 2;
+        }
+        else if(cameraLeft <= mapLeft)
+        {
+            cam.position.x = mapLeft + cameraHalfWidth;
+        }
+        else if(cameraRight >= mapRight)
+        {
+            cam.position.x = mapRight - cameraHalfWidth;
+        }
+
+// Vertical axis
+        if(mapHeight < cam.viewportHeight)
+        {
+            cam.position.y = mapTop / 2;
+        }
+        else if(cameraBottom <= mapBottom)
+        {
+            cam.position.y = mapBottom + cameraHalfHeight;
+        }
+        else if(cameraTop >= mapTop)
+        {
+            cam.position.y = mapTop - cameraHalfHeight;
+        }
     }
 }

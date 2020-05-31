@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.mygdx.game.entitites.Box2DSprite;
 
 import static com.mygdx.game.handlers.Box2DVariables.*;
 import static com.mygdx.game.handlers.Box2DVariables.CATEGORY_BIT_COLLECTABLE;
@@ -15,19 +16,21 @@ public class PlayerBodyBuilder {
     RevoluteJoint playerMotor;
     World world;
     Body body;
+    Box2DSprite entity;
 
-    public PlayerBodyBuilder(World world, Vector2 positionVector) {
+    public PlayerBodyBuilder(Box2DSprite entity, World world, Vector2 positionVector) {
         bodyDef = new BodyDef();
         fixtureDef = new FixtureDef();
         shape = new PolygonShape();
         this.world = world;
+        this.entity = entity;
 
-        this.body = createBody(bodyDef, fixtureDef, world, positionVector);
+        this.body = createPlayerBody(bodyDef, fixtureDef, world, positionVector);
     }
 
 
 
-    public Body createBody(BodyDef bodyDef, FixtureDef fixtureDef, World world, Vector2 positionVector) {
+    public Body createPlayerBody(BodyDef bodyDef, FixtureDef fixtureDef, World world, Vector2 positionVector) {
 
         // create player
         bodyDef.position.set(positionVector.x / pixelPerMeter, positionVector.y / pixelPerMeter);
@@ -37,7 +40,7 @@ public class PlayerBodyBuilder {
 
         shape.setAsBox(4 / pixelPerMeter, 16 / pixelPerMeter);
         fixtureDef.shape = shape;
-        fixtureDef.density = 10;
+        fixtureDef.density = 0;
         fixtureDef.restitution = 0;
         fixtureDef.friction = 0f;
 
@@ -48,9 +51,10 @@ public class PlayerBodyBuilder {
 
         // collision box
 
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         shape.setAsBox(4f / pixelPerMeter, 13 / pixelPerMeter, new Vector2(0, 1 / pixelPerMeter), 0);
         fixtureDef.shape = shape;
-        fixtureDef.density = 5;
+        fixtureDef.density = 50;
         fixtureDef.restitution = 0;
         fixtureDef.friction = 0f;
 
@@ -69,7 +73,7 @@ public class PlayerBodyBuilder {
         Body body2 = world.createBody(bodyDef);
         fixtureDef = new FixtureDef();
         fixtureDef.shape = circleShape;
-        fixtureDef.density = 50;
+        fixtureDef.density = 100;
         fixtureDef.restitution = 0f;
         fixtureDef.friction = 20f;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -81,7 +85,7 @@ public class PlayerBodyBuilder {
         RevoluteJointDef motor = new RevoluteJointDef();
         motor.enableMotor = false;
 //        motor.motorSpeed = 360 * MathUtils.degreesToRadians;
-        motor.maxMotorTorque = 100;
+        motor.maxMotorTorque = 500;
         motor.bodyA = body;
         motor.bodyB = body2;
         motor.collideConnected = false;
@@ -94,7 +98,7 @@ public class PlayerBodyBuilder {
 
         //create foot left sensor
 
-        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(-3.5f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(-3f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -104,7 +108,7 @@ public class PlayerBodyBuilder {
 
         //create foot right sensor
 
-        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(3.5f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(3f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -114,7 +118,7 @@ public class PlayerBodyBuilder {
 
         //create head sensor
 
-        shape.setAsBox(4f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(0, 16.5f / pixelPerMeter), 0);
+        shape.setAsBox(3.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(0, 16.5f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;

@@ -13,6 +13,7 @@ import com.mygdx.game.handlers.AnimationHandler;
 public class Box2DSprite {
 
     protected Body body;
+    protected RevoluteJoint motor;
     protected FixtureDef fixtureDef;
     protected AnimationHandler animationHandler;
     protected float width;
@@ -40,6 +41,7 @@ public class Box2DSprite {
     }
 
     public Body getBody() {return body; }
+    public RevoluteJoint getMotor() { return motor; }
     public FixtureDef getFixtureDef() { return fixtureDef;}
     public Vector2 getPosition() { return body.getPosition(); }
     public float getWidth() { return width; }
