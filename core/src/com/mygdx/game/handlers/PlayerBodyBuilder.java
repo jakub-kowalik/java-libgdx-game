@@ -92,15 +92,25 @@ public class PlayerBodyBuilder {
         playerMotor = (RevoluteJoint) world.createJoint(motor);
 
 
-        //create foot sensor
+        //create foot left sensor
 
-        shape.setAsBox(3f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(0, -16.5f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(-3.5f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
         fixtureDef.isSensor = true;
-        body.createFixture(fixtureDef).setUserData("foot");
+        body.createFixture(fixtureDef).setUserData("leftfoot");
+
+        //create foot right sensor
+
+        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(3.5f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0;
+        fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
+        fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef).setUserData("rightfoot");
 
         //create head sensor
 

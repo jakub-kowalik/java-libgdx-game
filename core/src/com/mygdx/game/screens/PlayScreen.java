@@ -85,7 +85,7 @@ public class PlayScreen extends BaseScreen {
             player.getBody().applyLinearImpulse(new Vector2(0, 2500 /pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
-        if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) && !contactHandler.getIsLeftContact()) {
+        if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) ) { // && !contactHandler.getIsLeftContact()
             if (player.getBody().getLinearVelocity().x > -5) {
                 playerMotor.enableMotor(false);
              player.getBody().applyLinearImpulse(
@@ -98,7 +98,7 @@ public class PlayScreen extends BaseScreen {
             }
         }
 
-        if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2) && !contactHandler.getIsRightContact()) {
+        if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) { // && !contactHandler.getIsRightContact()
             if (player.getBody().getLinearVelocity().x < 5) {
                 playerMotor.enableMotor(false);
               player.getBody().applyLinearImpulse(
