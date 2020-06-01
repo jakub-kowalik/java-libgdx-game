@@ -61,6 +61,7 @@ public class ContactHandler implements ContactListener {
         if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("crystal"))
             bodiesToRemove.add(fixtureB.getBody());
 
+
         System.out.println("1 " + numLeftFootContacts + " " + numRightFootContacts);
 
 

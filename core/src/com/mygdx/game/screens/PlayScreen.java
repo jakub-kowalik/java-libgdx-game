@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.builders.CollectableBuilder;
+import com.mygdx.game.builders.PlayerBuilder;
 import com.mygdx.game.entitites.Collectable;
 import com.mygdx.game.entitites.HUD;
 import com.mygdx.game.entitites.Player;
@@ -201,15 +203,10 @@ public class PlayScreen extends BaseScreen {
     }
 
     private void createPlayer() {
+        PlayerBuilder playerBuilder = new PlayerBuilder(world);
 
-        PlayerBodyBuilder playerBodyBuilder = new PlayerBodyBuilder(player, world, new Vector2(160,330));
-
-        //create player
-
-
-        player = new Player(playerBodyBuilder.getBody());
+        player = (Player) playerBuilder.createEntity(new Vector2(160,330));
         player.getBody().setUserData(player);
-
 
     }
 
@@ -289,41 +286,22 @@ public class PlayScreen extends BaseScreen {
     }
 
     private void createCollectable() {
+        CollectableBuilder builder = new CollectableBuilder(world);
         collectable = new Array<>();
 
         MapLayer layer = tiledMap.getLayers().get("crystals");
 
-        BodyDef bodyDef = new BodyDef();
-        FixtureDef fixtureDef = new FixtureDef();
-
         for (MapObject mapObject : layer.getObjects()) {
-
-            bodyDef.type = BodyDef.BodyType.StaticBody;
 
             float x = (float) mapObject.getProperties().get("x") / pixelPerMeter;
             float y = (float) mapObject.getProperties().get("y") / pixelPerMeter;
 
-            bodyDef.position.set(x, y);
-            CircleShape circleShape = new CircleShape();
-            circleShape.setRadius(8 / pixelPerMeter);
-
-            fixtureDef.shape = circleShape;
-            fixtureDef.isSensor = true;
-            fixtureDef.filter.categoryBits = CATEGORY_BIT_COLLECTABLE;
-            fixtureDef.filter.maskBits = CATEGORY_BIT_PLAYER;
-
-            Body body = world.createBody(bodyDef);
-            body.createFixture(fixtureDef).setUserData("crystal");
-
-            Collectable c = new Collectable(body);
+            Collectable c = (Collectable) builder.createEntity(new Vector2(x,y));
             collectable.add(c);
 
-            body.setUserData(c);
-
+            c.getBody().setUserData(c);
 
         }
-
-
     }
 
     void boundCamera(Camera cam) {

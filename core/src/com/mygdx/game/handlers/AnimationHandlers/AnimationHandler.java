@@ -15,7 +15,6 @@ public abstract class AnimationHandler {
 
     public void update(float dt) {
         stateTime+=dt;
-        System.out.println(stateTime);
     }
 
     public abstract void render(SpriteBatch batch);

@@ -7,13 +7,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.mygdx.game.handlers.AnimationHandlers.AnimationHandler;
 
-public abstract class Box2DSprite {
+public abstract class Entity {
 
     protected Body body;
-    protected RevoluteJoint motor;
-    protected FixtureDef fixtureDef;
     protected AnimationHandler animationHandler;
-    public Box2DSprite(Body body) {
+    public Entity(Body body) {
         this.body = body;
         setAnimationHandler();
     }
@@ -31,8 +29,6 @@ public abstract class Box2DSprite {
     }
 
     public Body getBody() {return body; }
-    public RevoluteJoint getMotor() { return motor; }
-    public FixtureDef getFixtureDef() { return fixtureDef;}
     public Vector2 getPosition() { return body.getPosition(); }
 
 }
