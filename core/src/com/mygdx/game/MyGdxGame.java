@@ -46,6 +46,8 @@ public class MyGdxGame extends Game {
 		resources.loadTexture("entities/pies.png", "crystals");
 		resources.loadTexture("entities/player1.png", "hud");
 		resources.loadTexture("entities/sky.png", "sky");
+		resources.loadTexture("entities/hedgehogsmal2l-Sheet.png", "hedgegogSheet");
+		resources.loadTexture("entities/playerSpriteSheet.png", "playerSheet");
 
 
 		spriteBatch = new SpriteBatch();
