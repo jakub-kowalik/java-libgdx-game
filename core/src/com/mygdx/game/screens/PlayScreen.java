@@ -1,5 +1,6 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
@@ -84,16 +85,16 @@ public class PlayScreen extends BaseScreen {
 
  //   @Override
     public void handleInput() {
-
+        player.isMoving = false;
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded() && !contactHandler.getIsCeiled()) {
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, 6000 /pixelPerMeter), player.getBody().getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0, 6000 / pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
-        if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) ) { // && !contactHandler.getIsLeftContact()
+        if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) { // && !contactHandler.getIsLeftContact()
             if (player.getBody().getLinearVelocity().x > -5) {
                 playerMotor.enableMotor(false);
-             player.getBody().applyLinearImpulse(
+                player.getBody().applyLinearImpulse(
                         -100 / pixelPerMeter,
                         0,
                         player.getBody().getWorldCenter().x,
@@ -101,12 +102,14 @@ public class PlayScreen extends BaseScreen {
                         true
                 );
             }
+            player.isMoving = true;
+            player.lookingRight = false;
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) { // && !contactHandler.getIsRightContact()
             if (player.getBody().getLinearVelocity().x < 5) {
                 playerMotor.enableMotor(false);
-              player.getBody().applyLinearImpulse(
+                player.getBody().applyLinearImpulse(
                         100 / pixelPerMeter,
                         0 / pixelPerMeter,
                         player.getBody().getWorldCenter().x,
@@ -114,7 +117,8 @@ public class PlayScreen extends BaseScreen {
                         true
                 );
             }
-
+            player.isMoving = true;
+            player.lookingRight = true;
         }
 
         if (InputHandler.isPressed(InputHandler.BUTTON5)) {
@@ -123,7 +127,6 @@ public class PlayScreen extends BaseScreen {
         if (InputHandler.isPressed(InputHandler.BUTTON6)) {
             debug = false;
         }
-
     }
 
     @Override
@@ -196,12 +199,7 @@ public class PlayScreen extends BaseScreen {
 
     private void createPlayer() {
 
-        BodyDef bodyDef = new BodyDef();
-        FixtureDef fixtureDef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-
         PlayerBodyBuilder playerBodyBuilder = new PlayerBodyBuilder(player, world, new Vector2(160,330));
-
 
         //create player
 
