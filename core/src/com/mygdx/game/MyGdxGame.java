@@ -70,6 +70,7 @@ public class MyGdxGame extends Game {
 		accumulator += Gdx.graphics.getDeltaTime();
 		currentScreen.update(STEP);
 		currentScreen.render(STEP);
+		InputHandler.update();
 
 /*		while(accumulator >= STEP) {
 			accumulator -= STEP;

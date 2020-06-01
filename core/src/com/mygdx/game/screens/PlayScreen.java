@@ -35,7 +35,6 @@ public class PlayScreen extends BaseScreen {
 
     private OrthographicCamera box2DCamera;
 
-    RevoluteJoint playerMotor;
 
     private ContactHandler contactHandler;
 
@@ -87,15 +86,16 @@ public class PlayScreen extends BaseScreen {
     public void handleInput() {
         player.isMoving = false;
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded() && !contactHandler.getIsCeiled()) {
+            player.getBody().setLinearDamping(0);
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, 6000 / pixelPerMeter), player.getBody().getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0, 10000 / pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) { // && !contactHandler.getIsLeftContact()
+            player.getBody().setLinearDamping(0);
             if (player.getBody().getLinearVelocity().x > -5) {
-                playerMotor.enableMotor(false);
                 player.getBody().applyLinearImpulse(
-                        -100 / pixelPerMeter,
+                        -500 / pixelPerMeter,
                         0,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
@@ -107,10 +107,10 @@ public class PlayScreen extends BaseScreen {
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) { // && !contactHandler.getIsRightContact()
+            player.getBody().setLinearDamping(0);
             if (player.getBody().getLinearVelocity().x < 5) {
-                playerMotor.enableMotor(false);
                 player.getBody().applyLinearImpulse(
-                        100 / pixelPerMeter,
+                        500 / pixelPerMeter,
                         0 / pixelPerMeter,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
@@ -149,11 +149,14 @@ public class PlayScreen extends BaseScreen {
         for (int i = 0; i < collectable.size; i++)
             collectable.get(i).update(dt);
 
-        if (Math.abs(player.getBody().getLinearVelocity().x) > 0 && !InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) {
-            playerMotor.setMotorSpeed(0);
-            playerMotor.enableMotor(true);
+        if(contactHandler.getIsGrounded())
+        if (Math.abs(player.getBody().getLinearVelocity().x) > 0 && !InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON1)) {
+            player.getBody().setLinearDamping(100000);
+            /*playerMotor.setMotorSpeed(0);
+            playerMotor.enableMotor(true);*/
 
-        }
+        } else
+            player.getBody().setLinearDamping(0);
     }
 
     @Override
@@ -206,7 +209,7 @@ public class PlayScreen extends BaseScreen {
 
         player = new Player(playerBodyBuilder.getBody());
         player.getBody().setUserData(player);
-        playerMotor = playerBodyBuilder.getPlayerMotor();
+
 
     }
 
@@ -329,11 +332,11 @@ public class PlayScreen extends BaseScreen {
 // The left boundary of the map (x)
         int mapLeft = 0;
 // The right boundary of the map (x + width)
-        int mapRight = 0 + mapWidth;
+        int mapRight = mapWidth;
 // The bottom boundary of the map (y)
         int mapBottom = 0;
 // The top boundary of the map (y + height)
-        int mapTop = 0 + mapHeight;
+        int mapTop = mapHeight;
 // The camera dimensions, halved
         float cameraHalfWidth = cam.viewportWidth * .5f;
         float cameraHalfHeight = cam.viewportHeight * .5f;
@@ -348,7 +351,7 @@ public class PlayScreen extends BaseScreen {
 // Horizontal axis
         if(mapWidth < cam.viewportWidth)
         {
-            cam.position.x = mapRight / 2;
+            cam.position.x = mapRight / 2f;
         }
         else if(cameraLeft <= mapLeft)
         {
@@ -362,7 +365,7 @@ public class PlayScreen extends BaseScreen {
 // Vertical axis
         if(mapHeight < cam.viewportHeight)
         {
-            cam.position.y = mapTop / 2;
+            cam.position.y = mapTop / 2f;
         }
         else if(cameraBottom <= mapBottom)
         {

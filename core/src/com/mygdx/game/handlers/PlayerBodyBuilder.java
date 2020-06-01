@@ -52,9 +52,9 @@ public class PlayerBodyBuilder {
         // collision box
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        shape.setAsBox(4f / pixelPerMeter, 13 / pixelPerMeter, new Vector2(0, 1 / pixelPerMeter), 0);
+        shape.setAsBox(4 / pixelPerMeter, 15 / pixelPerMeter, new Vector2(0, 0 / pixelPerMeter), 0);
         fixtureDef.shape = shape;
-        fixtureDef.density = 50;
+        fixtureDef.density = 100;
         fixtureDef.restitution = 0;
         fixtureDef.friction = 0f;
 
@@ -62,7 +62,7 @@ public class PlayerBodyBuilder {
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
         body.createFixture(fixtureDef).setUserData("player");
 
-        //wheel
+/*        //wheel
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(4f/pixelPerMeter);
@@ -80,9 +80,9 @@ public class PlayerBodyBuilder {
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND | CATEGORY_BIT_COLLECTABLE;
         body2.createFixture(fixtureDef);
         body2.setUserData("player");
-        circleShape.dispose();
+        circleShape.dispose();*/
 
-        RevoluteJointDef motor = new RevoluteJointDef();
+/*        RevoluteJointDef motor = new RevoluteJointDef();
         motor.enableMotor = false;
 //        motor.motorSpeed = 360 * MathUtils.degreesToRadians;
         motor.maxMotorTorque = 500;
@@ -93,7 +93,7 @@ public class PlayerBodyBuilder {
         motor.localAnchorA.set(0,(-16+4f) / pixelPerMeter);
         motor.localAnchorB.set(0,0);
 
-        playerMotor = (RevoluteJoint) world.createJoint(motor);
+        playerMotor = (RevoluteJoint) world.createJoint(motor);*/
 
 
         //create foot left sensor
