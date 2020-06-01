@@ -27,7 +27,6 @@ public class MyGdxGame extends Game {
 	private OrthographicCamera camera;
 	private OrthographicCamera hudCamera;
 
-	private GameStateManager gameStateManager;
 
 	public static ContentHandler resources;
 
