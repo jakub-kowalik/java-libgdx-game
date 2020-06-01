@@ -180,9 +180,8 @@ public class PlayScreen extends BaseScreen {
         orthogonalTiledMapRenderer.setView(camera);
         orthogonalTiledMapRenderer.render();
 
-        camera.position.set(player.getPosition().x * pixelPerMeter, player.getPosition().y * pixelPerMeter, 0);
-        boundCamera(camera);
-        camera.update();
+        camera.setBoundedPosition(player.getPosition().x, player.getPosition().y, 0, mapWidth, mapHeight);
+         camera.update();
 
         //draw player
         spriteBatch.setProjectionMatrix(camera.combined);
@@ -311,54 +310,5 @@ public class PlayScreen extends BaseScreen {
         }
     }
 
-    void boundCamera(Camera cam) {
 
-        // These values likely need to be scaled according to your world coordinates.
-// The left boundary of the map (x)
-        int mapLeft = 0;
-// The right boundary of the map (x + width)
-        int mapRight = mapWidth;
-// The bottom boundary of the map (y)
-        int mapBottom = 0;
-// The top boundary of the map (y + height)
-        int mapTop = mapHeight;
-// The camera dimensions, halved
-        float cameraHalfWidth = cam.viewportWidth * .5f;
-        float cameraHalfHeight = cam.viewportHeight * .5f;
-
-// Move camera after player as normal
-
-        float cameraLeft = cam.position.x - cameraHalfWidth;
-        float cameraRight = cam.position.x + cameraHalfWidth;
-        float cameraBottom = cam.position.y - cameraHalfHeight;
-        float cameraTop = cam.position.y + cameraHalfHeight;
-
-// Horizontal axis
-        if(mapWidth < cam.viewportWidth)
-        {
-            cam.position.x = mapRight / 2f;
-        }
-        else if(cameraLeft <= mapLeft)
-        {
-            cam.position.x = mapLeft + cameraHalfWidth;
-        }
-        else if(cameraRight >= mapRight)
-        {
-            cam.position.x = mapRight - cameraHalfWidth;
-        }
-
-// Vertical axis
-        if(mapHeight < cam.viewportHeight)
-        {
-            cam.position.y = mapTop / 2f;
-        }
-        else if(cameraBottom <= mapBottom)
-        {
-            cam.position.y = mapBottom + cameraHalfHeight;
-        }
-        else if(cameraTop >= mapTop)
-        {
-            cam.position.y = mapTop - cameraHalfHeight;
-        }
-    }
 }

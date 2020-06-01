@@ -24,7 +24,7 @@ public class MyGdxGame extends Game {
 	private boolean paused;
 
 	private SpriteBatch spriteBatch;
-	private OrthographicCamera camera;
+	private BoundedCamera camera;
 	private OrthographicCamera hudCamera;
 
 
@@ -51,7 +51,7 @@ public class MyGdxGame extends Game {
 
 
 		spriteBatch = new SpriteBatch();
-		camera = new OrthographicCamera();
+		camera = new BoundedCamera();
 		camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
 		hudCamera = new OrthographicCamera();
@@ -98,7 +98,7 @@ public class MyGdxGame extends Game {
 	}
 
 	public SpriteBatch getSpriteBatch() { return spriteBatch; }
-	public OrthographicCamera getCamera() { return camera; }
+	public BoundedCamera getCamera() { return camera; }
 	public OrthographicCamera getHudCamera() { return hudCamera; }
 	public boolean getPaused() { return paused; }
 	public void setPaused(boolean paused) { this.paused = paused; }

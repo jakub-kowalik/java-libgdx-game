@@ -4,13 +4,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.handlers.BoundedCamera;
 
 public abstract class BaseScreen implements Screen {
     protected final SpriteBatch spriteBatch;
    // protected final OrthographicCamera guiCam;
     protected final MyGdxGame game;
 
-    protected OrthographicCamera camera;
+    protected BoundedCamera camera;
     protected OrthographicCamera hudCamera;
 
 
