@@ -52,6 +52,7 @@ public class MapBodyBuilder {
             FixtureDef fdef = new FixtureDef();
             fdef.friction = 1f;
             fdef.restitution = 0;
+            fdef.density = 0f;
             fdef.shape = shape;
             fdef.filter.categoryBits = categoryBits;
             fdef.filter.maskBits = maskBits;

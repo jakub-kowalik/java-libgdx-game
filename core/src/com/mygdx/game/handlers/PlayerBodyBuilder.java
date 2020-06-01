@@ -2,9 +2,6 @@ package com.mygdx.game.handlers;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.mygdx.game.entitites.Box2DSprite;
 
 import static com.mygdx.game.handlers.Box2DVariables.*;
 import static com.mygdx.game.handlers.Box2DVariables.CATEGORY_BIT_COLLECTABLE;
@@ -13,24 +10,22 @@ public class PlayerBodyBuilder {
     BodyDef bodyDef;
     FixtureDef fixtureDef;
     PolygonShape shape;
-    RevoluteJoint playerMotor;
+    //RevoluteJoint playerMotor;
     World world;
     Body body;
-    Box2DSprite entity;
 
-    public PlayerBodyBuilder(Box2DSprite entity, World world, Vector2 positionVector) {
+    public PlayerBodyBuilder(World world, Vector2 positionVector) {
         bodyDef = new BodyDef();
         fixtureDef = new FixtureDef();
         shape = new PolygonShape();
         this.world = world;
-        this.entity = entity;
 
-        this.body = createPlayerBody(bodyDef, fixtureDef, world, positionVector);
+        this.body = createPlayerBody(positionVector);
     }
 
 
 
-    public Body createPlayerBody(BodyDef bodyDef, FixtureDef fixtureDef, World world, Vector2 positionVector) {
+    public Body createPlayerBody(Vector2 positionVector) {
 
         // create player
         bodyDef.position.set(positionVector.x / pixelPerMeter, positionVector.y / pixelPerMeter);
@@ -147,23 +142,4 @@ public class PlayerBodyBuilder {
         return body;
     }
 
-    public BodyDef getBodyDef() {
-        return bodyDef;
-    }
-
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
-    }
-
-    public PolygonShape getShape() {
-        return shape;
-    }
-
-    public RevoluteJoint getPlayerMotor() {
-        return playerMotor;
-    }
-
-    public Body getBody() {
-        return body;
-    }
 }

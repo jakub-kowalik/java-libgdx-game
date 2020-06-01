@@ -1,19 +1,20 @@
 package com.mygdx.game.builders;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.mygdx.game.entitites.Box2DSprite;
+import com.mygdx.game.entitites.Entity;
 
 public abstract class EntityBuilder {
-
     protected BodyDef bodyDef;
     protected FixtureDef fixtureDef;
-    protected PolygonShape shape;
-    protected RevoluteJoint playerMotor;
     protected World world;
-    protected Body body;
-    protected Box2DSprite entity;
 
 
-  //  public abstract
+    public EntityBuilder(World world){
+        bodyDef = new BodyDef();
+        fixtureDef = new FixtureDef();
+        this.world = world;
+    }
+
+    public abstract Entity createEntity(Vector2 positionVector);
 }

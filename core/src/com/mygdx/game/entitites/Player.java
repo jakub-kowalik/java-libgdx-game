@@ -3,7 +3,7 @@ package com.mygdx.game.entitites;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.handlers.AnimationHandlers.PlayerAnimationHandler;
 
-public class Player extends Box2DSprite {
+public class Player extends Entity {
 
     private int numCrystals;
     private int totalCrystals;
