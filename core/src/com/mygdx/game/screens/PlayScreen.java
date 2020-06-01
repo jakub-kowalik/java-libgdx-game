@@ -53,6 +53,8 @@ public class PlayScreen extends BaseScreen {
     MapBodyBuilder mapBodyBuilder;
     private boolean debug = true;
 
+    private float MAX_SPEED = 3f;
+
     public PlayScreen(MyGdxGame game) {
 
         super(game);
@@ -95,14 +97,16 @@ public class PlayScreen extends BaseScreen {
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) { // && !contactHandler.getIsLeftContact()
             player.getBody().setLinearDamping(0);
-            if (player.getBody().getLinearVelocity().x > -5) {
+            if (player.getBody().getLinearVelocity().x > -MAX_SPEED) {
                 player.getBody().applyLinearImpulse(
-                        -500 / pixelPerMeter,
+                        -750 / pixelPerMeter,
                         0,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
                 );
+            } else {
+                player.getBody().setLinearVelocity(-MAX_SPEED, player.getBody().getLinearVelocity().y);
             }
             player.isMoving = true;
             player.lookingRight = false;
@@ -110,14 +114,17 @@ public class PlayScreen extends BaseScreen {
 
         if (InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON2)) { // && !contactHandler.getIsRightContact()
             player.getBody().setLinearDamping(0);
-            if (player.getBody().getLinearVelocity().x < 5) {
+            System.out.println("Speed: " + player.getBody().getLinearVelocity().x);
+            if (player.getBody().getLinearVelocity().x < MAX_SPEED) {
                 player.getBody().applyLinearImpulse(
-                        500 / pixelPerMeter,
+                        750 / pixelPerMeter,
                         0 / pixelPerMeter,
                         player.getBody().getWorldCenter().x,
                         player.getBody().getWorldCenter().y,
                         true
                 );
+            } else {
+                player.getBody().setLinearVelocity(MAX_SPEED, player.getBody().getLinearVelocity().y);
             }
             player.isMoving = true;
             player.lookingRight = true;
@@ -152,8 +159,8 @@ public class PlayScreen extends BaseScreen {
             collectable.get(i).update(dt);
 
         if(contactHandler.getIsGrounded())
-        if (Math.abs(player.getBody().getLinearVelocity().x) > 0 && !InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isDown(InputHandler.BUTTON1)) {
-            player.getBody().setLinearDamping(100000);
+        if (Math.abs(player.getBody().getLinearVelocity().x) > 0 && !InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4) && !InputHandler.isPressed(InputHandler.BUTTON1)) {
+            player.getBody().setLinearDamping(10000000);
             /*playerMotor.setMotorSpeed(0);
             playerMotor.enableMotor(true);*/
 
