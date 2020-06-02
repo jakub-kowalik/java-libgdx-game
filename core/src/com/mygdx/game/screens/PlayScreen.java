@@ -47,6 +47,8 @@ public class PlayScreen extends BaseScreen {
     private int mapHeight;
 
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
+    private TiledMapTileLayer floorLayer;
+    private TiledMapTileLayer foliageLayer;
 
     private Player player;
     private Array<Collectable> collectable;
@@ -192,7 +194,10 @@ public class PlayScreen extends BaseScreen {
         spriteBatch.end();
 
         orthogonalTiledMapRenderer.setView(camera);
-        orthogonalTiledMapRenderer.render();
+
+        orthogonalTiledMapRenderer.getBatch().begin();
+        orthogonalTiledMapRenderer.renderTileLayer(foliageLayer);
+        orthogonalTiledMapRenderer.getBatch().end();
 
         camera.setBoundedPosition(player.getPosition().x, player.getPosition().y, 0, mapWidth, mapHeight);
          camera.update();
@@ -200,6 +205,10 @@ public class PlayScreen extends BaseScreen {
         //draw player
         spriteBatch.setProjectionMatrix(camera.combined);
         player.render(spriteBatch);
+
+        orthogonalTiledMapRenderer.getBatch().begin();
+        orthogonalTiledMapRenderer.renderTileLayer(floorLayer);
+        orthogonalTiledMapRenderer.getBatch().end();
 
         for(int i = 0; i < collectable.size; i++) {
             collectable.get(i).render(spriteBatch);
@@ -237,12 +246,16 @@ public class PlayScreen extends BaseScreen {
         tiledMap = new TmxMapLoader().load("maps/mapprototype-testing.tmx");
         orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
+
         tileSize = (int) tiledMap.getProperties().get("tilewidth");
 
         mapWidth = tiledMap.getProperties().get("width", Integer.class) * (int) tileSize;
         mapHeight = tiledMap.getProperties().get("height", Integer.class) * (int) tileSize;
 
-        TiledMapTileLayer layer;
+
+        floorLayer = (TiledMapTileLayer) tiledMap.getLayers().get("floor");
+
+        foliageLayer = (TiledMapTileLayer) tiledMap.getLayers().get("foliage");
 
         MapBodyBuilder.buildShapes(tiledMap, tileSize, "Obstacles", world, CATEGORY_BIT_GROUND, CATEGORY_BIT_PLAYER);
 
