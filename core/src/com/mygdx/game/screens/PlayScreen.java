@@ -23,10 +23,7 @@ import com.mygdx.game.builders.PlayerBuilder;
 import com.mygdx.game.entitites.Collectable;
 import com.mygdx.game.entitites.HUD;
 import com.mygdx.game.entitites.Player;
-import com.mygdx.game.handlers.ContactHandler;
-import com.mygdx.game.handlers.InputHandler;
-import com.mygdx.game.handlers.MapBodyBuilder;
-import com.mygdx.game.handlers.PlayerBodyBuilder;
+import com.mygdx.game.handlers.*;
 
 
 import static com.mygdx.game.MyGdxGame.V_HEIGHT;
@@ -85,6 +82,7 @@ public class PlayScreen extends BaseScreen {
         // set box2d cam
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false, V_WIDTH / pixelPerMeter, V_HEIGHT / pixelPerMeter);
+        camera = new BoundedCamera();
         camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         //set up hud

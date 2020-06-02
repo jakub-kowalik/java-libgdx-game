@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.handlers.*;
+import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.screens.PlayScreen;
 
 
@@ -43,6 +44,8 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create () {
 
+		//Gdx.graphics.setVSync(true);
+
 		Gdx.input.setInputProcessor(new InputProcessor());
 
 		resources = new ContentHandler();
@@ -64,7 +67,7 @@ public class MyGdxGame extends Game {
 		hudCamera.setToOrtho(false, V_WIDTH, V_HEIGHT);
 		//currentScreen = new PlayScreen(this);
 
-		this.setScreen(new PlayScreen(this));
+		this.setScreen(new MainMenuScreen(this));
 		backgroundSprite =new Sprite(resources.getTexture("sky"));
 	}
 

@@ -12,7 +12,8 @@ public class DesktopLauncher {
 		config.title = MyGdxGame.TITLE;
 		config.width = MyGdxGame.V_WIDTH * MyGdxGame.SCALE;
 		config.height = MyGdxGame.V_HEIGHT * MyGdxGame.SCALE;
-	//	config.vSyncEnabled = true;
+		//config.vSyncEnabled = true;
+		//config.fullscreen = true;
 
 		new LwjglApplication(new MyGdxGame(), config);
 
