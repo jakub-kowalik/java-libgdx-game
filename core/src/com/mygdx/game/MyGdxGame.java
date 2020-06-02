@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.handlers.*;
@@ -15,7 +16,7 @@ public class MyGdxGame extends Game {
 	Texture img;
 
 	public static final String TITLE = "Prototype";
-	public static final int V_WIDTH = 320;
+	public static final int V_WIDTH = 426;
 	public static final int V_HEIGHT = 240;
 	public static final int SCALE = 3;
 
@@ -26,6 +27,8 @@ public class MyGdxGame extends Game {
 	private SpriteBatch spriteBatch;
 	private BoundedCamera camera;
 	private OrthographicCamera hudCamera;
+
+	private BitmapFont font;
 
 
 	public static ContentHandler resources;
@@ -45,9 +48,11 @@ public class MyGdxGame extends Game {
 		resources.loadTexture("entities/michal-wisniewski.png", "michal");
 		resources.loadTexture("entities/pies.png", "crystals");
 		resources.loadTexture("entities/player1.png", "hud");
-		resources.loadTexture("entities/sky.png", "sky");
+		resources.loadTexture("entities/background-2.png", "sky");
 		resources.loadTexture("entities/hedgehogsmal2l-Sheet.png", "hedgegogSheet");
 		resources.loadTexture("entities/playerSpriteSheet.png", "playerSheet");
+
+		font = new BitmapFont();
 
 
 		spriteBatch = new SpriteBatch();
@@ -102,4 +107,7 @@ public class MyGdxGame extends Game {
 	public OrthographicCamera getHudCamera() { return hudCamera; }
 	public boolean getPaused() { return paused; }
 	public void setPaused(boolean paused) { this.paused = paused; }
+	public BitmapFont getFont() { return font; }
+
+
 }

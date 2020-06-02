@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
@@ -27,6 +28,8 @@ import com.mygdx.game.handlers.MapBodyBuilder;
 import com.mygdx.game.handlers.PlayerBodyBuilder;
 
 
+import static com.mygdx.game.MyGdxGame.V_HEIGHT;
+import static com.mygdx.game.MyGdxGame.V_WIDTH;
 import static com.mygdx.game.handlers.Box2DVariables.*;
 
 public class PlayScreen extends BaseScreen {
@@ -55,6 +58,9 @@ public class PlayScreen extends BaseScreen {
 
     private float MAX_SPEED = 3f;
 
+    private Music levelMusic;
+    private Music collectableMusic;
+
     public PlayScreen(MyGdxGame game) {
 
         super(game);
@@ -76,12 +82,16 @@ public class PlayScreen extends BaseScreen {
 
         // set box2d cam
         box2DCamera = new OrthographicCamera();
-        box2DCamera.setToOrtho(false, MyGdxGame.V_WIDTH / pixelPerMeter, MyGdxGame.V_HEIGHT / pixelPerMeter);
+        box2DCamera.setToOrtho(false, V_WIDTH / pixelPerMeter, V_HEIGHT / pixelPerMeter);
+        camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         //set up hud
         hud = new HUD(player);
 
-        //set background
+        levelMusic = Gdx.audio.newMusic(Gdx.files.internal("music/cringeForest1.wav"));
+        levelMusic.setLooping(true);
+        collectableMusic = Gdx.audio.newMusic(Gdx.files.internal("music/collectable.wav"));
+        collectableMusic.setLooping(false);
 
     }
 
@@ -92,7 +102,7 @@ public class PlayScreen extends BaseScreen {
         if (InputHandler.isPressed(InputHandler.BUTTON1) && contactHandler.getIsGrounded() && !contactHandler.getIsCeiled()) {
             player.getBody().setLinearDamping(0);
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-            player.getBody().applyLinearImpulse(new Vector2(0, 10000 / pixelPerMeter), player.getBody().getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0, 15000 / pixelPerMeter), player.getBody().getWorldCenter(), true);
         }
 
         if (InputHandler.isDown(InputHandler.BUTTON2) && !InputHandler.isDown(InputHandler.BUTTON4)) { // && !contactHandler.getIsLeftContact()
@@ -150,6 +160,7 @@ public class PlayScreen extends BaseScreen {
             collectable.removeValue((Collectable) body.getUserData(), true);
             world.destroyBody(bodies.get(i));
             player.collectCrystal();
+            collectableMusic.play();
         }
         bodies.clear();
 
@@ -308,6 +319,16 @@ public class PlayScreen extends BaseScreen {
             c.getBody().setUserData(c);
 
         }
+    }
+
+    @Override
+    public void show() {
+        levelMusic.play();
+    }
+
+    @Override
+    public void hide() {
+        levelMusic.stop();
     }
 
 

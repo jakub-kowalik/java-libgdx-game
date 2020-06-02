@@ -48,7 +48,7 @@ public class PlayerBuilder extends EntityBuilder {
         // collision box
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        shape.setAsBox(4 / pixelPerMeter, 15 / pixelPerMeter, new Vector2(0, 0 / pixelPerMeter), 0);
+        shape.setAsBox(4 / pixelPerMeter, 15.5f / pixelPerMeter, new Vector2(0, 0 / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 100;
         fixtureDef.restitution = 0;
@@ -94,7 +94,7 @@ public class PlayerBuilder extends EntityBuilder {
 
         //create foot left sensor
 
-        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(-3f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(-3f / pixelPerMeter, -15.99f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -104,7 +104,7 @@ public class PlayerBuilder extends EntityBuilder {
 
         //create foot right sensor
 
-        shape.setAsBox(0.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(3f / pixelPerMeter, -16.5f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(3f / pixelPerMeter, -15.99f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -114,7 +114,7 @@ public class PlayerBuilder extends EntityBuilder {
 
         //create head sensor
 
-        shape.setAsBox(3.5f / pixelPerMeter, 0.5f / pixelPerMeter, new Vector2(0, 16.5f / pixelPerMeter), 0);
+        shape.setAsBox(3.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(0, 15.99f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
         fixtureDef.filter.maskBits = CATEGORY_BIT_GROUND;
