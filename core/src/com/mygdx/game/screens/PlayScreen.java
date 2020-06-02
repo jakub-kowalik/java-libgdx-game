@@ -326,8 +326,8 @@ public class PlayScreen extends BaseScreen {
 
     @Override
     public void show() {
-
-        /*levelMusic.play();*/
+        levelMusic.setVolume(0.2f);
+        levelMusic.play();
 
     }
 
