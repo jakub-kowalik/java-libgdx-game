@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -61,21 +62,22 @@ public class MyGdxGame extends Game {
 
 		hudCamera = new OrthographicCamera();
 		hudCamera.setToOrtho(false, V_WIDTH, V_HEIGHT);
-		currentScreen = new PlayScreen(this);
+		//currentScreen = new PlayScreen(this);
 
-		this.setScreen(currentScreen);
+		this.setScreen(new PlayScreen(this));
 		backgroundSprite =new Sprite(resources.getTexture("sky"));
 	}
 
 
 	@Override
 	public void render () {
+
 		super.render();
 
-		accumulator += Gdx.graphics.getDeltaTime();
+/*		accumulator += Gdx.graphics.getDeltaTime();
 		currentScreen.update(STEP);
 		currentScreen.render(STEP);
-		InputHandler.update();
+		InputHandler.update();*/
 
 /*		while(accumulator >= STEP) {
 			accumulator -= STEP;
@@ -101,6 +103,7 @@ public class MyGdxGame extends Game {
 		spriteBatch.dispose();
 
 	}
+
 
 	public SpriteBatch getSpriteBatch() { return spriteBatch; }
 	public BoundedCamera getCamera() { return camera; }

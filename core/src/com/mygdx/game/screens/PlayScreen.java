@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -65,6 +66,7 @@ public class PlayScreen extends BaseScreen {
 
         super(game);
 
+        this.spriteBatch = game.getSpriteBatch();
         // set up box2d
         world = new World(new Vector2(0, -9.81f), false);
         contactHandler = new ContactHandler();
@@ -182,6 +184,9 @@ public class PlayScreen extends BaseScreen {
     @Override
     public void render(float dt) {
 
+        update(dt);
+
+        InputHandler.update();
 
 
         spriteBatch.begin();
@@ -222,7 +227,7 @@ public class PlayScreen extends BaseScreen {
     private void createPlayer() {
         PlayerBuilder playerBuilder = new PlayerBuilder(world);
 
-        player = (Player) playerBuilder.createEntity(new Vector2(160,330));
+        player = (Player) playerBuilder.createEntity(new Vector2(160,360));
         player.getBody().setUserData(player);
 
     }
@@ -323,7 +328,9 @@ public class PlayScreen extends BaseScreen {
 
     @Override
     public void show() {
-        levelMusic.play();
+
+        /*levelMusic.play();*/
+
     }
 
     @Override

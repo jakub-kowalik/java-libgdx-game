@@ -7,7 +7,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.handlers.BoundedCamera;
 
 public abstract class BaseScreen implements Screen {
-    protected final SpriteBatch spriteBatch;
+    protected SpriteBatch spriteBatch;
    // protected final OrthographicCamera guiCam;
     protected final MyGdxGame game;
 
@@ -17,7 +17,7 @@ public abstract class BaseScreen implements Screen {
 
     protected BaseScreen(MyGdxGame game){
         this.game = game;
-        spriteBatch = game.getSpriteBatch();
+       // spriteBatch = game.getSpriteBatch();
         camera = game.getCamera();
         hudCamera = game.getHudCamera();
      //   guiCam = new OrthographicCamera(800, 480);
@@ -25,7 +25,7 @@ public abstract class BaseScreen implements Screen {
 
     public abstract void render(float dt);
 
-    public abstract void update(float delta);
+    public abstract void update(float dt);
  //   public abstract void draw();
 
 

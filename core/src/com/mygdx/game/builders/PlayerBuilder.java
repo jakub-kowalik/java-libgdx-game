@@ -94,7 +94,7 @@ public class PlayerBuilder extends EntityBuilder {
 
         //create foot left sensor
 
-        shape.setAsBox(0.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(-3f / pixelPerMeter, -15.99f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(-3.25f / pixelPerMeter, -15.99f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
@@ -104,7 +104,7 @@ public class PlayerBuilder extends EntityBuilder {
 
         //create foot right sensor
 
-        shape.setAsBox(0.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(3f / pixelPerMeter, -15.99f / pixelPerMeter), 0);
+        shape.setAsBox(0.5f / pixelPerMeter, 0.01f / pixelPerMeter, new Vector2(3.25f / pixelPerMeter, -15.99f / pixelPerMeter), 0);
         fixtureDef.shape = shape;
         fixtureDef.density = 0;
         fixtureDef.filter.categoryBits = CATEGORY_BIT_PLAYER;
