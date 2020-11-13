@@ -55,7 +55,7 @@ public class MyGdxGame extends Game {
         Gdx.input.setInputProcessor(new InputInterpreter());
 
         resources = new ContentHandler();
-        resources.loadTexture("entities/michal-wisniewski.png", "michal");
+        resources.loadTexture("entities/playerSprite.png", "michal");
         resources.loadTexture("entities/pies.png", "crystals");
         resources.loadTexture("entities/player1.png", "hud");
         resources.loadTexture("entities/background-layer1.png", "bg1");

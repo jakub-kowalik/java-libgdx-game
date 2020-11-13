@@ -18,7 +18,8 @@ Current main features of game:
 <li>Soundtrack</li>
 </ul> 
 
-![game screenshot](https://i.imgur.com/2VtH7aE.jpg)
+[![Youtube link](https://img.youtube.com/vi/CSI0pZXZ4Ss/0.jpg)](https://www.youtube.com/watch?v=CSI0pZXZ4Ss)  
+(click image for youtube video)
 
 Authors:  
 [KrizzyK](https://github.com/KrizzyK)  
